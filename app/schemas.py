@@ -1,9 +1,19 @@
+"""
+schemas.pyはFastAPIのモデルを定義するためのファイルです。
+
+"""
+
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from pydantic import BaseModel
 
+
 Base = declarative_base()
 
+"""
+users テーブルの定義
+
+"""
 class User(Base):
     __tablename__ = "users"
 

@@ -1,43 +1,44 @@
-from logging.config import fileConfig
+"""
+env.pyは、Alembicの設定ファイルです。
 
+"""
+from logging.config import fileConfig
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
-
 from alembic import context
+from app.database import Base
+from app import models
 
-from app.database import Base  # 修正済み
-from app import models  # 追加
-
-# this is the Alembic Config object, which provides
-# access to the values within the .ini file in use.
+# これはAlembicのConfigオブジェクトで、
+# 使用中の.iniファイル内の値にアクセスするためのものです。
 config = context.config
 
-# Interpret the config file for Python logging.
-# This line sets up loggers basically.
+# Pythonのロギング設定ファイルを解釈します。
+# この行は基本的にロガーを設定します。
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-# add your model's MetaData object here
-# for 'autogenerate' support
+# ここにモデルのMetaDataオブジェクトを追加します
+# 'autogenerate'サポートのために
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-target_metadata = Base.metadata  # 修正済み
+target_metadata = Base.metadata
 
-# other values from the config, defined by the needs of env.py,
-# can be acquired:
+# env.pyのニーズに応じて定義された他の値は、
+# 取得できます：
 # my_important_option = config.get_main_option("my_important_option")
-# ... etc.
+# ... など。
 
 def run_migrations_offline() -> None:
-    """Run migrations in 'offline' mode.
+    """'オフライン'モードでマイグレーションを実行します。
 
-    This configures the context with just a URL
-    and not an Engine, though an Engine is acceptable
-    here as well.  By skipping the Engine creation
-    we don't even need a DBAPI to be available.
+    これはコンテキストをURLだけで構成し、
+    エンジンを使用しませんが、エンジンも許容されます。
+    エンジンの作成をスキップすることで、
+    DBAPIが利用可能である必要すらありません。
 
-    Calls to context.execute() here emit the given string to the
-    script output.
+    ここでcontext.execute()を呼び出すと、
+    指定された文字列がスクリプト出力に出力されます。
 
     """
     url = config.get_main_option("sqlalchemy.url")
@@ -53,10 +54,10 @@ def run_migrations_offline() -> None:
 
 
 def run_migrations_online() -> None:
-    """Run migrations in 'online' mode.
+    """'オンライン'モードでマイグレーションを実行します。
 
-    In this scenario we need to create an Engine
-    and associate a connection with the context.
+    このシナリオでは、エンジンを作成し、
+    コンテキストと接続を関連付ける必要があります。
 
     """
     connectable = engine_from_config(
@@ -74,6 +75,11 @@ def run_migrations_online() -> None:
             context.run_migrations()
 
 
+"""
+Alembicは、オフラインモードとオンラインモードの両方で実行できます。
+オフラインモードでは、URLだけが必要です。
+オンラインモードでは、エンジンを作成し、コンテキストと接続を関連付ける必要があります。
+"""
 if context.is_offline_mode():
     run_migrations_offline()
 else:
